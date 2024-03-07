@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MobileAssignment</string>
+    <string name="button_addEvent">Add Event</string>
+    <string name="hint_eventTitle">Event Title</string>
+    <string name="hint_eventDescription">Event Description</string>
+    <string name="hint_eventLocation">Event Location\n</string>
 </resources>

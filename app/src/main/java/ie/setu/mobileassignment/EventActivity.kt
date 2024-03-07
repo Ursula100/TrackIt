@@ -5,10 +5,10 @@ import android.os.Bundle
 import timber.log.Timber
 import timber.log.Timber.i
 
-class TrackitActivity : AppCompatActivity() {
+class EventActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_trackit)
+        setContentView(R.layout.activity_event)
 
         Timber.plant(Timber.DebugTree())
         i("Trackit Activity started..")
