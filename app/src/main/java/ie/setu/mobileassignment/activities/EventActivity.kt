@@ -19,7 +19,6 @@ class EventActivity : AppCompatActivity() {
         binding = ActivityEventBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Timber.plant(Timber.DebugTree())
         i("Trackit Activity started..")
 
         binding.addBtn.setOnClickListener {
