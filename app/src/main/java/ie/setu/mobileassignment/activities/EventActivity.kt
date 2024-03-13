@@ -4,21 +4,22 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import ie.setu.mobileassignment.databinding.ActivityEventBinding
+import ie.setu.mobileassignment.main.MainApp
 import ie.setu.mobileassignment.models.EventModel
-import timber.log.Timber
 import timber.log.Timber.i
 
 class EventActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEventBinding
     var event = EventModel()
-    var events = ArrayList<EventModel>()
+    lateinit var app : MainApp
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityEventBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        app = application as MainApp
         i("Trackit Activity started..")
 
         binding.addBtn.setOnClickListener {
@@ -26,10 +27,10 @@ class EventActivity : AppCompatActivity() {
             event.description = binding.eventDescription.text.toString()
             event.location = binding.eventLocation.text.toString()
             if (event.title.isNotEmpty()) {
-                events.add(event.copy())
+                app.events.add(event.copy())
                 i("add Button Pressed: $event")
-                for (i in events.indices){
-                    i("Event[${i+1}: ${events[i]}")
+                for (i in app.events.indices){
+                    i("Event[${i+1}: ${app.events[i]}")
                 }
             }
             else {
