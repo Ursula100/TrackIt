@@ -27,7 +27,7 @@ class EventActivity : AppCompatActivity() {
             event.description = binding.eventDescription.text.toString()
             event.location = binding.eventLocation.text.toString()
             if (event.title.isNotEmpty()) {
-                events.add(event.copy)
+                events.add(event.copy())
                 i("add Button Pressed: $event")
                 for (i in events.indices){
                     i("Event[${i+1}: ${events[i]}")
