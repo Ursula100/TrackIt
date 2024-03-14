@@ -5,7 +5,7 @@ import ie.setu.mobileassignment.models.EventModel
 import timber.log.Timber
 import timber.log.Timber.i
 
-class MainApp: Application() {
+class MainApp : Application() {
 
     val events = ArrayList<EventModel>()
 

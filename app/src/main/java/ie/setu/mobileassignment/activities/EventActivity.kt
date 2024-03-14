@@ -12,7 +12,7 @@ class EventActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEventBinding
     var event = EventModel()
-    lateinit var app : MainApp
+    lateinit var app: MainApp
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,7 +30,7 @@ class EventActivity : AppCompatActivity() {
                 app.events.add(event.copy())
                 i("add Button Pressed: $event")
                 for (i in app.events.indices){
-                    i("Event[${i+1}: ${app.events[i]}")
+                    i("Event[${i+1}]: ${app.events[i]}")
                 }
             }
             else {
