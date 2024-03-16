@@ -34,12 +34,15 @@ class EventActivity : AppCompatActivity() {
         i("Trackit Activity started..")
 
         val curDateTime = Calendar.getInstance().time
-        val sFormatter = SimpleDateFormat("EEE, MMM dd", Locale.getDefault())
-        val dFormatter = DateTimeFormatter.ofPattern("EEE, MMM dd")
+        val sFormatter = SimpleDateFormat("EEE, MMM dd yyyy", Locale.getDefault())
+        val dFormatter = DateTimeFormatter.ofPattern("EEE, MMM dd yyyy")
         val curDate = sFormatter.format(curDateTime)
 
-        binding.startDateBtn.text = curDate
-        binding.endDateBtn.text = curDate
+        var selectedStartDate = curDate
+        var selectedEndDate = curDate
+
+        binding.startDateBtn.text = selectedStartDate.substring(0, 11)
+        binding.endDateBtn.text = selectedEndDate.substring(0,11)
 
         binding.startTimeBtn.text = getString(R.string._start_time)
         binding.endTimeBtn.text = getString(R.string._end_time)
@@ -49,8 +52,8 @@ class EventActivity : AppCompatActivity() {
             val title = binding.eventTitle.text.toString()
             val description = binding.eventDescription.text.toString()
             val location = binding.eventLocation.text.toString()
-            val startDate = LocalDate.parse(binding.startDateBtn.text, dFormatter)
-            val endDate = LocalDate.parse(binding.endDateBtn.text, dFormatter)
+            val startDate = LocalDate.parse(selectedStartDate, dFormatter)
+            val endDate = LocalDate.parse(selectedEndDate, dFormatter)
             val startTime = binding.startTimeBtn.text.toString()
             val endTime = binding.endTimeBtn.text.toString()
 
@@ -69,7 +72,7 @@ class EventActivity : AppCompatActivity() {
             }
         }
 
-        binding.startDateBtn.setOnClickListener(){
+        binding.startDateBtn.setOnClickListener{
             val datePicker =
                 MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select start date")
@@ -80,13 +83,13 @@ class EventActivity : AppCompatActivity() {
 
             datePicker.addOnPositiveButtonClickListener {
                 val selected = datePicker.selection
-                val selectedDate = sFormatter.format(selected)
-                binding.startDateBtn.text = selectedDate
+                selectedStartDate = sFormatter.format(selected)
+                binding.startDateBtn.text = selectedStartDate.substring(0,11)
             }
 
         }
 
-        binding.endDateBtn.setOnClickListener(){
+        binding.endDateBtn.setOnClickListener{
             val datePicker =
                 MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select start date")
@@ -97,8 +100,8 @@ class EventActivity : AppCompatActivity() {
 
             datePicker.addOnPositiveButtonClickListener {
                 val selected = datePicker.selection
-                val selectedDate = sFormatter.format(selected)
-                binding.endDateBtn.text = selectedDate
+                selectedEndDate = sFormatter.format(selected)
+                binding.endDateBtn.text = selectedEndDate.substring(0, 11)
             }
         }
 
