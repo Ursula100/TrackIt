@@ -23,7 +23,6 @@ import java.util.Locale
 class EventActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEventBinding
-    var event = EventModel()
     lateinit var app: MainApp
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,13 +46,16 @@ class EventActivity : AppCompatActivity() {
 
 
         binding.addBtn.setOnClickListener {
-            event.title = binding.eventTitle.text.toString()
-            event.description = binding.eventDescription.text.toString()
-            event.location = binding.eventLocation.text.toString()
-            //var startDate = LocalDate.parse(binding.startDateBtn.text, dFormatter);
-            //var endDate = LocalDate.parse(binding.endDateBtn.text, dFormatter);
+            val title = binding.eventTitle.text.toString()
+            val description = binding.eventDescription.text.toString()
+            val location = binding.eventLocation.text.toString()
+            val startDate = LocalDate.parse(binding.startDateBtn.text, dFormatter)
+            val endDate = LocalDate.parse(binding.endDateBtn.text, dFormatter)
+            val startTime = binding.startTimeBtn.text.toString()
+            val endTime = binding.endTimeBtn.text.toString()
 
-            if (event.title.isNotEmpty()) {
+            if (title.isNotEmpty()) {
+                val event = EventModel(title, description, location, startDate, endDate, startTime, endTime)
                 app.events.add(event.copy())
                 i("add Button Pressed: $event")
                 for (i in app.events.indices){
