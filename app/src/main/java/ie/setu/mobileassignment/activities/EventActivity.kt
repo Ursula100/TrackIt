@@ -44,8 +44,8 @@ class EventActivity : AppCompatActivity() {
         binding.startDateBtn.text = selectedStartDate.substring(0, 11)
         binding.endDateBtn.text = selectedEndDate.substring(0,11)
 
-        binding.startTimeBtn.text = getString(R.string._start_time)
-        binding.endTimeBtn.text = getString(R.string._end_time)
+        binding.startTimeBtn.text = getString(R.string.default_start_time)
+        binding.endTimeBtn.text = getString(R.string.default_end_time)
 
 
         binding.addBtn.setOnClickListener {
