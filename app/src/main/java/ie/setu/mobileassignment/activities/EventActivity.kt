@@ -64,6 +64,8 @@ class EventActivity : AppCompatActivity() {
                 for (i in app.events.indices){
                     i("Event[${i+1}]: ${app.events[i]}")
                 }
+                setResult(RESULT_OK)
+                finish()
             }
             else {
                 Snackbar

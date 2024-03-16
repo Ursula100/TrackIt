@@ -1,5 +1,6 @@
 package ie.setu.mobileassignment.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,13 +23,20 @@ class EventView : AppCompatActivity() {
 
         app = application as MainApp
 
+        binding.dateTextView.text = "Friday, 16 March"
+
+        binding.floatingAddButton.setOnClickListener {
+            val intent = Intent(this, EventActivity::class.java)
+            startActivity(intent)
+        }
+
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = EventAdapter(app.events)
     }
 }
 
-class EventAdapter constructor(private var events: List<EventModel>) :
+class EventAdapter (private var events: List<EventModel>) :
     RecyclerView.Adapter<EventAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
