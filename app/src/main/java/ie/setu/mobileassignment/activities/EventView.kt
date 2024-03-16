@@ -28,7 +28,7 @@ class EventView : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = EventAdapter(app.events)
+        binding.recyclerView.adapter = EventAdapter(app.events.findAll())
     }
 }
 

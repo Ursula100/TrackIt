@@ -59,11 +59,8 @@ class EventActivity : AppCompatActivity() {
 
             if (title.isNotEmpty()) {
                 val event = EventModel(title, description, location, startDate, endDate, startTime, endTime)
-                app.events.add(event.copy())
+                app.events.create(event.copy())
                 i("add Button Pressed: $event")
-                for (i in app.events.indices){
-                    i("Event[${i+1}]: ${app.events[i]}")
-                }
                 setResult(RESULT_OK)
                 finish()
             }
