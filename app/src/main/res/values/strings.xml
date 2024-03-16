@@ -11,4 +11,5 @@
     <string name="standard_icon_btn_desc">Arrow icon</string>
     <string name="default_start_time">8:00 AM</string>
     <string name="default_end_time">9:00 AM</string>
+    <string name="display_event_time">Event time</string>
 </resources>
