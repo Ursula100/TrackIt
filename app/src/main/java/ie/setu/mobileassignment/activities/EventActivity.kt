@@ -1,8 +1,8 @@
 package ie.setu.mobileassignment.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -14,9 +14,11 @@ import ie.setu.mobileassignment.main.MainApp
 import ie.setu.mobileassignment.models.EventModel
 import timber.log.Timber.i
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
+
 
 class EventActivity : AppCompatActivity() {
 
@@ -33,8 +35,9 @@ class EventActivity : AppCompatActivity() {
         i("Trackit Activity started..")
 
         val curDateTime = Calendar.getInstance().time
-        val formatter = SimpleDateFormat("EEE, MMM dd", Locale.getDefault())
-        val curDate = formatter.format(curDateTime)
+        val sFormatter = SimpleDateFormat("EEE, MMM dd", Locale.getDefault())
+        val dFormatter = DateTimeFormatter.ofPattern("EEE, MMM dd")
+        val curDate = sFormatter.format(curDateTime)
 
         binding.startDateBtn.text = curDate
         binding.endDateBtn.text = curDate
@@ -47,6 +50,9 @@ class EventActivity : AppCompatActivity() {
             event.title = binding.eventTitle.text.toString()
             event.description = binding.eventDescription.text.toString()
             event.location = binding.eventLocation.text.toString()
+            //var startDate = LocalDate.parse(binding.startDateBtn.text, dFormatter);
+            //var endDate = LocalDate.parse(binding.endDateBtn.text, dFormatter);
+
             if (event.title.isNotEmpty()) {
                 app.events.add(event.copy())
                 i("add Button Pressed: $event")
@@ -72,7 +78,7 @@ class EventActivity : AppCompatActivity() {
 
             datePicker.addOnPositiveButtonClickListener {
                 val selected = datePicker.selection
-                val selectedDate = formatter.format(selected)
+                val selectedDate = sFormatter.format(selected)
                 binding.startDateBtn.text = selectedDate
             }
 
@@ -89,7 +95,7 @@ class EventActivity : AppCompatActivity() {
 
             datePicker.addOnPositiveButtonClickListener {
                 val selected = datePicker.selection
-                val selectedDate = formatter.format(selected)
+                val selectedDate = sFormatter.format(selected)
                 binding.endDateBtn.text = selectedDate
             }
         }
