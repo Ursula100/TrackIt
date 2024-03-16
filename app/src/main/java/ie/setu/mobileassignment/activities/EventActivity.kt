@@ -2,11 +2,21 @@ package ie.setu.mobileassignment.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.format.DateFormat.is24HourFormat
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK
+import com.google.android.material.timepicker.TimeFormat
+import ie.setu.mobileassignment.R
 import ie.setu.mobileassignment.databinding.ActivityEventBinding
 import ie.setu.mobileassignment.main.MainApp
 import ie.setu.mobileassignment.models.EventModel
 import timber.log.Timber.i
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class EventActivity : AppCompatActivity() {
 
@@ -21,6 +31,17 @@ class EventActivity : AppCompatActivity() {
 
         app = application as MainApp
         i("Trackit Activity started..")
+
+        val curDateTime = Calendar.getInstance().time
+        val formatter = SimpleDateFormat("EEE, MMM dd", Locale.getDefault())
+        val curDate = formatter.format(curDateTime)
+
+        binding.startDateBtn.text = curDate
+        binding.endDateBtn.text = curDate
+
+        binding.startTimeBtn.text = getString(R.string._start_time)
+        binding.endTimeBtn.text = getString(R.string._end_time)
+
 
         binding.addBtn.setOnClickListener {
             event.title = binding.eventTitle.text.toString()
@@ -38,6 +59,104 @@ class EventActivity : AppCompatActivity() {
                     .make(it,"Please enter a title", Snackbar.LENGTH_LONG)
                     .show()
             }
+        }
+
+        binding.startDateBtn.setOnClickListener(){
+            val datePicker =
+                MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Select start date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .build()
+
+            datePicker.show(supportFragmentManager, "EventActivity")
+
+            datePicker.addOnPositiveButtonClickListener {
+                val selected = datePicker.selection
+                val selectedDate = formatter.format(selected)
+                binding.startDateBtn.text = selectedDate
+            }
+
+        }
+
+        binding.endDateBtn.setOnClickListener(){
+            val datePicker =
+                MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Select start date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .build()
+
+            datePicker.show(supportFragmentManager, "EventActivity")
+
+            datePicker.addOnPositiveButtonClickListener {
+                val selected = datePicker.selection
+                val selectedDate = formatter.format(selected)
+                binding.endDateBtn.text = selectedDate
+            }
+        }
+
+
+        binding.startTimeBtn.setOnClickListener{
+
+            val isSystem24Hour = is24HourFormat(this)
+            val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+
+            val timePicker =
+                MaterialTimePicker.Builder()
+                    .setTimeFormat(clockFormat)
+                    .setHour(10)
+                    .setMinute(15)
+                    .setInputMode(INPUT_MODE_CLOCK)
+                    .setTitleText("Set start time")
+                    .build()
+
+            timePicker.show(supportFragmentManager, "EventActivity")
+
+            timePicker.addOnPositiveButtonClickListener {
+
+                val pickedHour = timePicker.hour
+                val pickedMinute = timePicker.minute
+
+                val formattedTime: String = when{
+                    pickedHour < 12 -> { if(pickedMinute < 10)  "$pickedHour:0$pickedMinute AM" else "$pickedHour:${pickedMinute} AM" }
+                    else -> { if(pickedMinute < 10) "${pickedHour - 12}:0$pickedMinute PM" else "${pickedHour - 12}:${pickedMinute} PM" }
+                }
+
+                binding.startTimeBtn.text = formattedTime
+
+            }
+
+        }
+
+        binding.endTimeBtn.setOnClickListener{
+
+            val isSystem24Hour = is24HourFormat(this)
+            val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+
+            val timePicker =
+                MaterialTimePicker.Builder()
+                    .setTimeFormat(clockFormat)
+                    .setHour(10)
+                    .setMinute(15)
+                    .setInputMode(INPUT_MODE_CLOCK)
+                    .setTitleText("Set end time")
+                    .build()
+
+            timePicker.show(supportFragmentManager, "EventActivity")
+
+            timePicker.addOnPositiveButtonClickListener {
+
+                val pickedHour = timePicker.hour
+                val pickedMinute = timePicker.minute
+
+                val formattedTime: String = when{
+                    pickedHour < 12 -> { if(pickedMinute < 10)  "$pickedHour:0$pickedMinute AM" else "$pickedHour:${pickedMinute} AM" }
+                    else -> { if(pickedMinute < 10) "${pickedHour - 12}:0$pickedMinute PM" else "${pickedHour - 12}:${pickedMinute} PM" }
+                }
+
+                binding.endTimeBtn.text = formattedTime
+
+            }
+
         }
 
     }
