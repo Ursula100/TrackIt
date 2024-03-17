@@ -16,12 +16,10 @@ import timber.log.Timber.i
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Locale
 
-/** Activity in charge of activity_event xml layout.
- *It manages the visual screen to create events
- * It inherits the android life cycle from AppCompatActivity.
- */
+
 class EventActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEventBinding
@@ -35,49 +33,37 @@ class EventActivity : AppCompatActivity() {
         app = application as MainApp
         i("Trackit Activity started..")
 
-        //A formatter which Converts a Date object to desired String representation.
+        val curDateTime = Calendar.getInstance().time
         val sFormatter = SimpleDateFormat("EEE, MMM dd yyyy", Locale.getDefault())
-        //Formatter for parsing DateTime objects to desired string representation.
         val dFormatter = DateTimeFormatter.ofPattern("EEE, MMM dd yyyy")
+        val curDate = sFormatter.format(curDateTime)
 
-        //Get today's date as LocalDAte object
-        val curLocalDate = LocalDate.now()
-        //Convert today's date to String of format of format Sat. SEP 12 2024
-        val curDate = curLocalDate.format(dFormatter)
-
-        /*Assign curDate string to both start and end date as default.
-          It's important to have it in full i.e including the year, as we may need to parse it to some date type*/
         var selectedStartDate = curDate
         var selectedEndDate = curDate
 
-        //Get substring od date string as Sat, SEP 12 (11 first chars)
         binding.startDateBtn.text = selectedStartDate.substring(0, 11)
         binding.endDateBtn.text = selectedEndDate.substring(0,11)
 
-        //Assign default start and end times as string values from Resource folder.
-        binding.startTimeBtn.text = getString(R.string.default_start_time)
-        binding.endTimeBtn.text = getString(R.string.default_end_time)
+        binding.startTimeBtn.text = getString(R.string._start_time)
+        binding.endTimeBtn.text = getString(R.string._end_time)
 
 
-        /* Listener detects when addBtn is clicked.
-           When addBtn is clicked, f the title field is left empty, it shows a quick message is shown to the user telling them to enter a title.
-           Else, an event is created and the created event is added to the arraylist with appropriate values for each field.
-         */
         binding.addBtn.setOnClickListener {
             val title = binding.eventTitle.text.toString()
             val description = binding.eventDescription.text.toString()
             val location = binding.eventLocation.text.toString()
-            val startDate = LocalDate.parse(selectedStartDate, dFormatter) //Parse String to LocalDate using DateTimeFormatter
+            val startDate = LocalDate.parse(selectedStartDate, dFormatter)
             val endDate = LocalDate.parse(selectedEndDate, dFormatter)
             val startTime = binding.startTimeBtn.text.toString()
             val endTime = binding.endTimeBtn.text.toString()
 
             if (title.isNotEmpty()) {
                 val event = EventModel(title, description, location, startDate, endDate, startTime, endTime)
-                app.events.create(event.copy())
+                app.events.add(event.copy())
                 i("add Button Pressed: $event")
-                setResult(RESULT_OK)
-                finish()
+                for (i in app.events.indices){
+                    i("Event[${i+1}]: ${app.events[i]}")
+                }
             }
             else {
                 Snackbar
@@ -86,9 +72,6 @@ class EventActivity : AppCompatActivity() {
             }
         }
 
-        /*Date picker pops up when button is clicked.
-          Retrieves and stores date selected from date picker as start date.
-        */
         binding.startDateBtn.setOnClickListener{
             val datePicker =
                 MaterialDatePicker.Builder.datePicker()
@@ -100,15 +83,12 @@ class EventActivity : AppCompatActivity() {
 
             datePicker.addOnPositiveButtonClickListener {
                 val selected = datePicker.selection
-                selectedStartDate = sFormatter.format(selected) //Includes year details
+                selectedStartDate = sFormatter.format(selected)
                 binding.startDateBtn.text = selectedStartDate.substring(0,11)
             }
 
         }
 
-        /*Date picker pops up when button is clicked.
-          Retrieves and stores date selected from date picker as end date.
-        */
         binding.endDateBtn.setOnClickListener{
             val datePicker =
                 MaterialDatePicker.Builder.datePicker()
@@ -120,21 +100,17 @@ class EventActivity : AppCompatActivity() {
 
             datePicker.addOnPositiveButtonClickListener {
                 val selected = datePicker.selection
-                selectedEndDate = sFormatter.format(selected) //Includes year details
+                selectedEndDate = sFormatter.format(selected)
                 binding.endDateBtn.text = selectedEndDate.substring(0, 11)
             }
         }
 
 
-        /*Time picker pops up when button is clicked.
-          Retrieves and stores date selected from time picker as a String of form: 8:05 AM/PM
-        */
         binding.startTimeBtn.setOnClickListener{
 
             val isSystem24Hour = is24HourFormat(this)
             val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
-            //Programmatically creates time picker
             val timePicker =
                 MaterialTimePicker.Builder()
                     .setTimeFormat(clockFormat)
@@ -144,14 +120,13 @@ class EventActivity : AppCompatActivity() {
                     .setTitleText("Set start time")
                     .build()
 
-            timePicker.show(supportFragmentManager, "EventActivity") //display time picker
+            timePicker.show(supportFragmentManager, "EventActivity")
 
             timePicker.addOnPositiveButtonClickListener {
 
                 val pickedHour = timePicker.hour
                 val pickedMinute = timePicker.minute
 
-                //Formats time as a String such as: 8:05 AM/PM
                 val formattedTime: String = when{
                     pickedHour < 12 -> { if(pickedMinute < 10)  "$pickedHour:0$pickedMinute AM" else "$pickedHour:${pickedMinute} AM" }
                     else -> { if(pickedMinute < 10) "${pickedHour - 12}:0$pickedMinute PM" else "${pickedHour - 12}:${pickedMinute} PM" }
@@ -163,28 +138,22 @@ class EventActivity : AppCompatActivity() {
 
         }
 
-
-        /*Time picker pops up when button is clicked.
-          Retrieves and stores date selected from time picker as a String of form: 8:05 AM/PM
-        */
         binding.endTimeBtn.setOnClickListener{
 
             val isSystem24Hour = is24HourFormat(this)
             val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
-            //Programmatically creates time picker
             val timePicker =
                 MaterialTimePicker.Builder()
                     .setTimeFormat(clockFormat)
-                    .setHour(10) //Hour hand on 10 as default
-                    .setMinute(15) //Minute hand on 15 as default
-                    .setInputMode(INPUT_MODE_CLOCK) //Start in clock mode
+                    .setHour(10)
+                    .setMinute(15)
+                    .setInputMode(INPUT_MODE_CLOCK)
                     .setTitleText("Set end time")
                     .build()
 
             timePicker.show(supportFragmentManager, "EventActivity")
 
-            //When clicked on ok, the hour selected is stored and used
             timePicker.addOnPositiveButtonClickListener {
 
                 val pickedHour = timePicker.hour
