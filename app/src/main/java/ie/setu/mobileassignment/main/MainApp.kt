@@ -15,10 +15,6 @@ class MainApp : Application() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
         i("App started")
-
-        events.create(EventModel("test 1", "", "Waterford", LocalDate.now(), LocalDate.now(), "9:10 AM", "20: 15 PM"))
-        events.create(EventModel("test 2", "Whatever1", "", LocalDate.now(), LocalDate.now(), "", "20:15 PM"))
-        events.create(EventModel("test 3", "Whatever2", "London", LocalDate.now(), LocalDate.now(), "9:10", ""))
     }
 
 }
