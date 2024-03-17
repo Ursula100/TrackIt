@@ -1,6 +1,7 @@
 package ie.setu.mobileassignment.models
 
 import timber.log.Timber.i
+import java.time.LocalDate
 
 class EventMemStore: EventStore {
 
@@ -13,6 +14,14 @@ class EventMemStore: EventStore {
     override fun create(event: EventModel){
         events.add(event)
         logAll()
+    }
+
+    override fun findByDate(date: LocalDate): List<EventModel> {
+        val eventsMatch = ArrayList<EventModel>()
+        for(event in events){
+            if(event.startDate == date) eventsMatch.add(event)
+        }
+        return eventsMatch
     }
 
     fun logAll(){

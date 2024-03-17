@@ -10,11 +10,8 @@ import com.google.android.material.snackbar.Snackbar
 import ie.setu.mobileassignment.adapters.EventAdapter
 import ie.setu.mobileassignment.databinding.ActivityEventViewBinding
 import ie.setu.mobileassignment.main.MainApp
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.Locale
 
 class EventView : AppCompatActivity() {
 
@@ -28,18 +25,21 @@ class EventView : AppCompatActivity() {
 
         app = application as MainApp
 
-        val curDateTime = Calendar.getInstance().time
-        val sFormatter = SimpleDateFormat("EEE, MMM dd yyyy", Locale.getDefault())
+        val curLocalDate = LocalDate.now()
         val dFormatter = DateTimeFormatter.ofPattern("EEE, MMM dd yyyy")
         val dFormatter1 = DateTimeFormatter.ofPattern("yyyy-M-d")
-        val curDate = sFormatter.format(curDateTime).substring(0,11)
+        val curDate = dFormatter.format(curLocalDate).substring(0,11)
+
         binding.dateTextView.text = curDate
+
+        binding.recyclerView.adapter = EventAdapter(app.events.findByDate(curLocalDate))
 
         binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val dateString = "$year-${month+1}-$dayOfMonth"
             val localDate = LocalDate.parse(dateString, dFormatter1)
             val selectedDate = dFormatter.format(localDate).substring(0,11)
             binding.dateTextView.text = selectedDate
+            binding.recyclerView.adapter = EventAdapter(app.events.findByDate(localDate))
         }
 
         binding.floatingAddButton.setOnClickListener {
