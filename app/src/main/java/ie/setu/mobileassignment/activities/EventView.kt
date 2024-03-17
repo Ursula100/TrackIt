@@ -18,6 +18,8 @@ class EventView : AppCompatActivity() {
     private lateinit var binding: ActivityEventViewBinding
     lateinit var app: MainApp
 
+    //Binds activity to the layout
+    //Initialises some components when the activity is createed.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEventViewBinding.inflate(layoutInflater)
@@ -25,15 +27,22 @@ class EventView : AppCompatActivity() {
 
         app = application as MainApp
 
+        // Assigns current date as LocalDate object
         val curLocalDate = LocalDate.now()
+        //Formatter parses LocalDate object to a String representation
         val dFormatter = DateTimeFormatter.ofPattern("EEE, MMM dd yyyy")
         val dFormatter1 = DateTimeFormatter.ofPattern("yyyy-M-d")
+
+        //Get current date in like: Sat, SEP 11
         val curDate = dFormatter.format(curLocalDate).substring(0,11)
 
+        //Display today's date at first as default
         binding.dateTextView.text = curDate
 
+        //RecyclerView displays events on selected date
         binding.recyclerView.adapter = EventAdapter(app.events.findByDate(curLocalDate))
 
+        //Listens to change of selected date, updates shown selected date text and updates RecyclerView with events of the current selected date
         binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             val dateString = "$year-${month+1}-$dayOfMonth"
             val localDate = LocalDate.parse(dateString, dFormatter1)
@@ -42,6 +51,7 @@ class EventView : AppCompatActivity() {
             binding.recyclerView.adapter = EventAdapter(app.events.findByDate(localDate))
         }
 
+        //Add button launches EventActivity when clicked and  keeps note of result
         binding.floatingAddButton.setOnClickListener {
             val intent = Intent(this, EventActivity::class.java)
             getResult.launch(intent)
@@ -52,6 +62,7 @@ class EventView : AppCompatActivity() {
         binding.recyclerView.adapter = EventAdapter(app.events.findAll())
     }
 
+    //If result from EventActivity is RESULT_CANCELED notify user that the event was not created
     private val getResult =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()

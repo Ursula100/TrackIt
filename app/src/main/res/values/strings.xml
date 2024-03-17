@@ -14,4 +14,5 @@
     <string name="display_event_time">Event time</string>
     <string name="selectedDAte">Selected date</string>
     <string name="add_button">Add Event</string>
+    <string name="my_app_name">TrackIt</string>
 </resources>
