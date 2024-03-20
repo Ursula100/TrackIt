@@ -3,6 +3,8 @@ package ie.setu.mobileassignment.activities
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -72,28 +74,41 @@ class EventActivity : AppCompatActivity() {
             val startTime = binding.startTimeBtn.text.toString()
             val endTime = binding.endTimeBtn.text.toString()
 
-            if (title.isNotEmpty()) {
+            if (title.isNotEmpty() && startDate <= endDate)
+            {
                 val event = EventModel(title, description, location, startDate, endDate, startTime, endTime)
                 app.events.create(event.copy())
                 i("add Button Pressed: $event")
                 setResult(RESULT_OK)
                 finish()
             }
-            else {
+            else if (title.isEmpty()){
                 Snackbar
                     .make(it,"Please enter a title", Snackbar.LENGTH_LONG)
+                    .show()
+            }
+            else {
+                Snackbar
+                    .make(it,"End date should be no earlier than the start date", Snackbar.LENGTH_LONG)
                     .show()
             }
         }
 
         /*Date picker pops up when button is clicked.
           Retrieves and stores date selected from date picker as start date.
+          https://github.com/material-components/material-components-android/blob/master/docs/components/DatePicker.md
         */
         binding.startDateBtn.setOnClickListener{
+
+            val constraintsBuilder =
+                CalendarConstraints.Builder()
+                    .setValidator(DateValidatorPointForward.now())
+
             val datePicker =
                 MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select start date")
                     .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .setCalendarConstraints(constraintsBuilder.build())
                     .build()
 
             datePicker.show(supportFragmentManager, "EventActivity")
@@ -110,10 +125,16 @@ class EventActivity : AppCompatActivity() {
           Retrieves and stores date selected from date picker as end date.
         */
         binding.endDateBtn.setOnClickListener{
+
+            val constraintsBuilder =
+                CalendarConstraints.Builder()
+                    .setValidator(DateValidatorPointForward.now())
+
             val datePicker =
                 MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select start date")
                     .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .setCalendarConstraints(constraintsBuilder.build())
                     .build()
 
             datePicker.show(supportFragmentManager, "EventActivity")
