@@ -14,6 +14,9 @@ import ie.setu.mobileassignment.R
 import ie.setu.mobileassignment.databinding.ActivityEventBinding
 import ie.setu.mobileassignment.main.MainApp
 import ie.setu.mobileassignment.models.EventModel
+import ie.setu.mobileassignment.utils.EventValidation.datesValid
+import ie.setu.mobileassignment.utils.EventValidation.timeCompare
+import ie.setu.mobileassignment.utils.Formatters.formattedTime
 import timber.log.Timber.i
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -28,6 +31,10 @@ class EventActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEventBinding
     lateinit var app: MainApp
+
+    private val isSystem24Hour = is24HourFormat(this)
+    private val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -74,28 +81,8 @@ class EventActivity : AppCompatActivity() {
             val startTime = binding.startTimeBtn.text.toString()
             val endTime = binding.endTimeBtn.text.toString()
 
-            /*Method compares two time strings, str1 and str2 in the format Hour:Minute AM/PM
-              Returns 1 if str1 is before str2 and 0 otherwise
-            */
 
-            fun timeCompare(str1: String, str2: String): Int{
-                val amPm1 = str1.substring(str1.indexOf(' ') + 1)
-                val amPm2 = str2.substring(str2.indexOf(' ') + 1)
-                return if(amPm1 !== amPm2)
-                    if (amPm1 == "AM")  1 else 0
-                else {
-                    val sHour1 = str1.substring(0, str1.indexOf(':'))
-                    val sHour2 = str2.substring(0, str2.indexOf(':'))
-                    if (sHour1 == sHour2) {
-                        val sMinute1 = str1.substring(str1.indexOf(':') + 1, str1.indexOf(':') + 2)
-                        val sMinute2 = str2.substring(str2.indexOf(':') + 1, str2.indexOf(':') + 2)
-                        if (sMinute1 <= sMinute2) 1 else 0
-                    } else if (sHour1 < sHour2) 1
-                    else 0
-                }
-            }
-
-            if (title.isNotEmpty() && startDate <= endDate && timeCompare(startTime,endTime) == 1) {
+            if (title.isNotEmpty() && datesValid(startDate, endDate) && timeCompare(startTime,endTime) == 1) {
                 val event = EventModel(title, description, location, startDate, endDate, startTime, endTime)
                 app.events.create(event.copy())
                 i("add Button Pressed: $event")
@@ -107,14 +94,14 @@ class EventActivity : AppCompatActivity() {
                     .make(it,"Please enter a title", Snackbar.LENGTH_LONG)
                     .show()
             }
-            else if (timeCompare(startTime, endTime) == 0){
+            else if (!datesValid(startDate, endDate)){
                 Snackbar
-                    .make(it,"End time should be no earlier than the start time ", Snackbar.LENGTH_LONG)
+                    .make(it,"End date should be no earlier than the start date", Snackbar.LENGTH_LONG)
                     .show()
             }
             else {
                 Snackbar
-                    .make(it,"End date should be no earlier than the start date", Snackbar.LENGTH_LONG)
+                    .make(it,"End time should be no earlier than the start time ", Snackbar.LENGTH_LONG)
                     .show()
             }
         }
@@ -177,9 +164,6 @@ class EventActivity : AppCompatActivity() {
         */
         binding.startTimeBtn.setOnClickListener{
 
-            val isSystem24Hour = is24HourFormat(this)
-            val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
-
             //Programmatically creates time picker
             val timePicker =
                 MaterialTimePicker.Builder()
@@ -197,13 +181,7 @@ class EventActivity : AppCompatActivity() {
                 val pickedHour = timePicker.hour
                 val pickedMinute = timePicker.minute
 
-                //Formats time as a String such as: 8:05 AM/PM
-                val formattedTime: String = when{
-                    pickedHour < 12 -> { if(pickedMinute < 10)  "$pickedHour:0$pickedMinute AM" else "$pickedHour:${pickedMinute} AM" }
-                    else -> { if(pickedMinute < 10) "${pickedHour - 12}:0$pickedMinute PM" else "${pickedHour - 12}:${pickedMinute} PM" }
-                }
-
-                binding.startTimeBtn.text = formattedTime
+                binding.startTimeBtn.text = formattedTime(pickedHour, pickedMinute)
 
             }
 
@@ -214,9 +192,6 @@ class EventActivity : AppCompatActivity() {
           Retrieves and stores date selected from time picker as a String of form: 8:05 AM/PM
         */
         binding.endTimeBtn.setOnClickListener{
-
-            val isSystem24Hour = is24HourFormat(this)
-            val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
             //Programmatically creates time picker
             val timePicker =
@@ -236,12 +211,7 @@ class EventActivity : AppCompatActivity() {
                 val pickedHour = timePicker.hour
                 val pickedMinute = timePicker.minute
 
-                val formattedTime: String = when{
-                    pickedHour < 12 -> { if(pickedMinute < 10)  "$pickedHour:0$pickedMinute AM" else "$pickedHour:${pickedMinute} AM" }
-                    else -> { if(pickedMinute < 10) "${pickedHour - 12}:0$pickedMinute PM" else "${pickedHour - 12}:${pickedMinute} PM" }
-                }
-
-                binding.endTimeBtn.text = formattedTime
+                binding.endTimeBtn.text = formattedTime(pickedHour, pickedMinute)
 
             }
 
