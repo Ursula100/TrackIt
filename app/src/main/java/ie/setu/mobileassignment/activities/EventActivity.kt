@@ -3,12 +3,7 @@ package ie.setu.mobileassignment.activities
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK
 import com.google.android.material.timepicker.TimeFormat
 import ie.setu.mobileassignment.R
 import ie.setu.mobileassignment.databinding.ActivityEventBinding
@@ -17,6 +12,8 @@ import ie.setu.mobileassignment.models.EventModel
 import ie.setu.mobileassignment.utils.EventValidation.datesValid
 import ie.setu.mobileassignment.utils.EventValidation.timeCompare
 import ie.setu.mobileassignment.utils.Formatters.formattedTime
+import ie.setu.mobileassignment.utils.Pickers.datePicker
+import ie.setu.mobileassignment.utils.Pickers.timePicker
 import timber.log.Timber.i
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -31,9 +28,6 @@ class EventActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEventBinding
     lateinit var app: MainApp
-
-    private val isSystem24Hour = is24HourFormat(this)
-    private val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,16 +106,7 @@ class EventActivity : AppCompatActivity() {
         */
         binding.startDateBtn.setOnClickListener{
 
-            val constraintsBuilder =
-                CalendarConstraints.Builder()
-                    .setValidator(DateValidatorPointForward.now())
-
-            val datePicker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select start date")
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .setCalendarConstraints(constraintsBuilder.build())
-                    .build()
+            val datePicker = datePicker("Select start date")
 
             datePicker.show(supportFragmentManager, "EventActivity")
 
@@ -138,16 +123,7 @@ class EventActivity : AppCompatActivity() {
         */
         binding.endDateBtn.setOnClickListener{
 
-            val constraintsBuilder =
-                CalendarConstraints.Builder()
-                    .setValidator(DateValidatorPointForward.now())
-
-            val datePicker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select start date")
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .setCalendarConstraints(constraintsBuilder.build())
-                    .build()
+            val datePicker = datePicker("Select end date")
 
             datePicker.show(supportFragmentManager, "EventActivity")
 
@@ -164,15 +140,12 @@ class EventActivity : AppCompatActivity() {
         */
         binding.startTimeBtn.setOnClickListener{
 
+
+            val isSystem24Hour = is24HourFormat(this)
+            val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+
             //Programmatically creates time picker
-            val timePicker =
-                MaterialTimePicker.Builder()
-                    .setTimeFormat(clockFormat)
-                    .setHour(10)
-                    .setMinute(15)
-                    .setInputMode(INPUT_MODE_CLOCK)
-                    .setTitleText("Set start time")
-                    .build()
+            val timePicker = timePicker("Set start time", clockFormat)
 
             timePicker.show(supportFragmentManager, "EventActivity") //display time picker
 
@@ -193,15 +166,12 @@ class EventActivity : AppCompatActivity() {
         */
         binding.endTimeBtn.setOnClickListener{
 
+
+            val isSystem24Hour = is24HourFormat(this)
+            val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+
             //Programmatically creates time picker
-            val timePicker =
-                MaterialTimePicker.Builder()
-                    .setTimeFormat(clockFormat)
-                    .setHour(10) //Hour hand on 10 as default
-                    .setMinute(15) //Minute hand on 15 as default
-                    .setInputMode(INPUT_MODE_CLOCK) //Start in clock mode
-                    .setTitleText("Set end time")
-                    .build()
+            val timePicker = timePicker("Set start time", clockFormat)
 
             timePicker.show(supportFragmentManager, "EventActivity")
 
