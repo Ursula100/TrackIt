@@ -74,8 +74,28 @@ class EventActivity : AppCompatActivity() {
             val startTime = binding.startTimeBtn.text.toString()
             val endTime = binding.endTimeBtn.text.toString()
 
-            if (title.isNotEmpty() && startDate <= endDate)
-            {
+            /*Method compares two time strings, str1 and str2 in the format Hour:Minute AM/PM
+              Returns 1 if str1 is before str2 and 0 otherwise
+            */
+
+            fun timeCompare(str1: String, str2: String): Int{
+                val amPm1 = str1.substring(str1.indexOf(' ') + 1)
+                val amPm2 = str2.substring(str2.indexOf(' ') + 1)
+                return if(amPm1 !== amPm2)
+                    if (amPm1 == "AM")  1 else 0
+                else {
+                    val sHour1 = str1.substring(0, str1.indexOf(':'))
+                    val sHour2 = str2.substring(0, str2.indexOf(':'))
+                    if (sHour1 == sHour2) {
+                        val sMinute1 = str1.substring(str1.indexOf(':') + 1, str1.indexOf(':') + 2)
+                        val sMinute2 = str2.substring(str2.indexOf(':') + 1, str2.indexOf(':') + 2)
+                        if (sMinute1 <= sMinute2) 1 else 0
+                    } else if (sHour1 < sHour2) 1
+                    else 0
+                }
+            }
+
+            if (title.isNotEmpty() && startDate <= endDate && timeCompare(startTime,endTime) == 1) {
                 val event = EventModel(title, description, location, startDate, endDate, startTime, endTime)
                 app.events.create(event.copy())
                 i("add Button Pressed: $event")
@@ -85,6 +105,11 @@ class EventActivity : AppCompatActivity() {
             else if (title.isEmpty()){
                 Snackbar
                     .make(it,"Please enter a title", Snackbar.LENGTH_LONG)
+                    .show()
+            }
+            else if (timeCompare(startTime, endTime) == 0){
+                Snackbar
+                    .make(it,"End time should be no earlier than the start time ", Snackbar.LENGTH_LONG)
                     .show()
             }
             else {
