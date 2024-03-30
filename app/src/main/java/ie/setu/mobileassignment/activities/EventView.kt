@@ -19,7 +19,7 @@ class EventView : AppCompatActivity() {
     lateinit var app: MainApp
 
     //Binds activity to the layout
-    //Initialises some components when the activity is createed.
+    //Initialises some components when the activity is created.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEventViewBinding.inflate(layoutInflater)
