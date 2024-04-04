@@ -45,7 +45,7 @@ class EventActivity : AppCompatActivity() {
 
         //Get today's date as LocalDAte object
         val curLocalDate = LocalDate.now()
-        //Convert today's date to String of format of format Sat. SEP 12 2024
+        //Convert today's date to String of format of format: Sat, SEP 12 2024
         val curDate = curLocalDate.format(dFormatter)
 
         /*Assign curDate string to both start and end date as default.
@@ -165,7 +165,6 @@ class EventActivity : AppCompatActivity() {
           Retrieves and stores date selected from time picker as a String of form: 8:05 AM/PM
         */
         binding.endTimeBtn.setOnClickListener{
-
 
             val isSystem24Hour = is24HourFormat(this)
             val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H

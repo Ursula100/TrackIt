@@ -29,7 +29,7 @@ class EventMemStore: EventStore {
         return eventsMatch
     }
 
-    //Methods logs all events
+    //Method logs all events
     private fun logAll(){
         events.forEach { i("$it") }
     }
