@@ -10,7 +10,7 @@ var lastId = 0L
 internal fun getId() = lastId++
 class EventMemStore: EventStore {
 
-    val events = ArrayList<EventModel>()
+    private val events = ArrayList<EventModel>()
 
     //Method returns List of all events
     override fun findAll(): List<EventModel>{

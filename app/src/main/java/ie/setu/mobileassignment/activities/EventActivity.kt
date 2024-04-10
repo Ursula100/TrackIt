@@ -38,8 +38,9 @@ class EventActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         app = application as MainApp
+        var edit = false //flag to check if we arrived from EventView Activity.
 
-        i("Trackit Activity started..")
+        i("Trackit Activity started..") /***TODO: extract all log messages to string.xml*/
 
         //A formatter which Converts a Date object to desired String representation.
         val sFormatter = SimpleDateFormat("EEE, MMM dd yyyy", Locale.getDefault())
@@ -65,9 +66,10 @@ class EventActivity : AppCompatActivity() {
         binding.endTimeBtn.text = getString(R.string.default_end_time)
 
         if (intent.hasExtra("event_edit")){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                event = intent.extras?.getParcelable("event_edit", EventModel::class.java)!!
-            }
+            edit = true
+            event = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.extras?.getParcelable("event_edit", EventModel::class.java)!!//Find link to code snippet
+            } else intent.extras?.getParcelable("event_edit")!!
             binding.eventTitle.setText(event.title)
             binding.eventDescription.setText(event.description)
             binding.eventLocation.setText(event.location)
@@ -75,6 +77,8 @@ class EventActivity : AppCompatActivity() {
             binding.endDateBtn.text = event.endDate.format(dFormatter).substring(0,11)
             binding.startTimeBtn.text = event.startTime
             binding.endTimeBtn.text = event.endTime
+
+            binding.addBtn.setText(R.string.button_save_event)
         }
 
 
@@ -94,8 +98,14 @@ class EventActivity : AppCompatActivity() {
 
             if (title.isNotEmpty() && datesValid(startDate, endDate) && timeCompare(startTime,endTime) == 1) {
                 val event = EventModel(id, title, description, location, startDate, endDate, startTime, endTime)
-                app.events.create(event.copy())
-                i("add Button Pressed: $event")
+                if(edit) {
+                    app.events.update(event.copy())
+                    i("Save Event Button Pressed: $event")
+                }
+                else {
+                    app.events.create(event.copy())
+                    i("add Button Pressed: $event")
+                }
                 setResult(RESULT_OK)
                 finish()
             }
