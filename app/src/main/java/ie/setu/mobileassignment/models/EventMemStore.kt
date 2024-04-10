@@ -35,7 +35,7 @@ class EventMemStore: EventStore {
     }
 
     override fun update(event: EventModel){
-        var eventFound: EventModel? = events.find { e -> e.id == event.id}
+        val eventFound: EventModel? = events.find { e -> e.id == event.id}
         if (eventFound != null){
             eventFound.title = event.title
             eventFound.description = event.description

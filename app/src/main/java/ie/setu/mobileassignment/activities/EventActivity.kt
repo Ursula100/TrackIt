@@ -92,7 +92,6 @@ class EventActivity : AppCompatActivity() {
             val startTime = binding.startTimeBtn.text.toString()
             val endTime = binding.endTimeBtn.text.toString()
 
-
             if (title.isNotEmpty() && datesValid(startDate, endDate) && timeCompare(startTime,endTime) == 1) {
                 val event = EventModel(id, title, description, location, startDate, endDate, startTime, endTime)
                 app.events.create(event.copy())
@@ -102,17 +101,17 @@ class EventActivity : AppCompatActivity() {
             }
             else if (title.isEmpty()){
                 Snackbar
-                    .make(it,"Please enter a title", Snackbar.LENGTH_LONG)
+                    .make(it, getString(R.string.enter_a_title), Snackbar.LENGTH_LONG)
                     .show()
             }
             else if (!datesValid(startDate, endDate)){
                 Snackbar
-                    .make(it,"End date should be no earlier than the start date", Snackbar.LENGTH_LONG)
+                    .make(it, getString(R.string.date_selection_error), Snackbar.LENGTH_LONG)
                     .show()
             }
             else {
                 Snackbar
-                    .make(it,"End time should be no earlier than the start time ", Snackbar.LENGTH_LONG)
+                    .make(it, getString(R.string.time_selection_error), Snackbar.LENGTH_LONG)
                     .show()
             }
         }
