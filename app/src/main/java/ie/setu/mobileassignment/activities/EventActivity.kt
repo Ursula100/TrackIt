@@ -1,5 +1,6 @@
 package ie.setu.mobileassignment.activities
 
+import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ import java.util.Locale
 class EventActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEventBinding
+    private var event = EventModel(0,"", "", "", LocalDate.now(), LocalDate.now(), "", "")
     lateinit var app: MainApp
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +38,7 @@ class EventActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         app = application as MainApp
+
         i("Trackit Activity started..")
 
         //A formatter which Converts a Date object to desired String representation.
@@ -61,12 +64,26 @@ class EventActivity : AppCompatActivity() {
         binding.startTimeBtn.text = getString(R.string.default_start_time)
         binding.endTimeBtn.text = getString(R.string.default_end_time)
 
+        if (intent.hasExtra("event_edit")){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                event = intent.extras?.getParcelable("event_edit", EventModel::class.java)!!
+            }
+            binding.eventTitle.setText(event.title)
+            binding.eventDescription.setText(event.description)
+            binding.eventLocation.setText(event.location)
+            binding.startDateBtn.text = event.startDate.format(dFormatter).substring(0,11)
+            binding.endDateBtn.text = event.endDate.format(dFormatter).substring(0,11)
+            binding.startTimeBtn.text = event.startTime
+            binding.endTimeBtn.text = event.endTime
+        }
+
 
         /* Listener detects when addBtn is clicked.
            When addBtn is clicked, f the title field is left empty, it shows a quick message is shown to the user telling them to enter a title.
            Else, an event is created and the created event is added to the arraylist with appropriate values for each field.
          */
         binding.addBtn.setOnClickListener {
+            val id = 0L
             val title = binding.eventTitle.text.toString()
             val description = binding.eventDescription.text.toString()
             val location = binding.eventLocation.text.toString()
@@ -77,7 +94,7 @@ class EventActivity : AppCompatActivity() {
 
 
             if (title.isNotEmpty() && datesValid(startDate, endDate) && timeCompare(startTime,endTime) == 1) {
-                val event = EventModel(title, description, location, startDate, endDate, startTime, endTime)
+                val event = EventModel(id, title, description, location, startDate, endDate, startTime, endTime)
                 app.events.create(event.copy())
                 i("add Button Pressed: $event")
                 setResult(RESULT_OK)
@@ -160,7 +177,6 @@ class EventActivity : AppCompatActivity() {
 
         }
 
-
         /*Time picker pops up when button is clicked.
           Retrieves and stores date selected from time picker as a String of form: 8:05 AM/PM
         */
@@ -185,6 +201,5 @@ class EventActivity : AppCompatActivity() {
             }
 
         }
-
     }
 }

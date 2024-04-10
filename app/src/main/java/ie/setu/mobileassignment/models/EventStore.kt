@@ -6,4 +6,5 @@ interface EventStore {
     fun findAll(): List<EventModel>
     fun create(event: EventModel)
     fun findByDate(date: LocalDate): List<EventModel>
+    fun update(event: EventModel)
 }
