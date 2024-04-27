@@ -9,11 +9,12 @@ import java.time.LocalDate
 
 class MainApp : Application() {
 
-    val events = EventMemStore()
+    lateinit var events: EventMemStore
 
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
+        events = EventMemStore()
         i("App started")
     }
 
