@@ -20,4 +20,8 @@
     <string name="date_selection_error">End date should be no earlier than the start date</string>
     <string name="time_selection_error">"End time should be no earlier than the start time "</string>
     <string name="adding_event_cancelled">Adding Event Cancelled</string>
+    <string name="select_start_date">Select start date</string>
+    <string name="select_end_date">Select end date</string>
+    <string name="set_start_time">Set start time</string>
+    <string name="set_end_time">Set end time</string>
 </resources>

@@ -135,7 +135,8 @@ class EventActivity : AppCompatActivity() {
         */
         binding.startDateBtn.setOnClickListener{
 
-            val datePicker = datePicker("Select start date")
+            val pickerTitle = getString(R.string.select_start_date)
+            val datePicker = datePicker(pickerTitle)
 
             datePicker.show(supportFragmentManager, "EventActivity")
 
@@ -151,8 +152,9 @@ class EventActivity : AppCompatActivity() {
           Retrieves and stores date selected from date picker as end date.
         */
         binding.endDateBtn.setOnClickListener{
+            val pickerTitle = getString(R.string.select_end_date)
 
-            val datePicker = datePicker("Select end date")
+            val datePicker = datePicker(pickerTitle)
 
             datePicker.show(supportFragmentManager, "EventActivity")
 
@@ -172,8 +174,10 @@ class EventActivity : AppCompatActivity() {
             val isSystem24Hour = is24HourFormat(this)
             val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
+            val pickerTitle = getString(R.string.set_start_time)
+
             //Programmatically creates time picker
-            val timePicker = timePicker("Set start time", clockFormat)
+            val timePicker = timePicker(pickerTitle, clockFormat)
 
             timePicker.show(supportFragmentManager, "EventActivity") //display time picker
 
@@ -196,8 +200,10 @@ class EventActivity : AppCompatActivity() {
             val isSystem24Hour = is24HourFormat(this)
             val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
+            val pickerTitle = getString(R.string.set_end_time)
+
             //Programmatically creates time picker
-            val timePicker = timePicker("Set start time", clockFormat)
+            val timePicker = timePicker(pickerTitle, clockFormat)
 
             timePicker.show(supportFragmentManager, "EventActivity")
 
