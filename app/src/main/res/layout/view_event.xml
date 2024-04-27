@@ -38,6 +38,13 @@
             android:contentDescription="@string/display_event_time"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
+        <TextView
+            android:id="@+id/viewEventLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/hint_eventLocation"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"

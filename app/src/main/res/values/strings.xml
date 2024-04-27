@@ -19,4 +19,5 @@
     <string name="enter_a_title">Please enter a title</string>
     <string name="date_selection_error">End date should be no earlier than the start date</string>
     <string name="time_selection_error">"End time should be no earlier than the start time "</string>
+    <string name="adding_event_cancelled">Adding Event Cancelled</string>
 </resources>

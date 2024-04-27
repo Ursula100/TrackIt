@@ -3,11 +3,10 @@ package ie.setu.mobileassignment.models
 import timber.log.Timber.i
 import java.time.LocalDate
 
-/**Class implementing a simple in-memory implementation using ArrayList
- */
+/**Class implementing a simple in-memory implementation using ArrayList*/
 
 var lastId = 0L
-internal fun getId() = lastId++
+internal fun getId() = ++lastId
 class EventMemStore: EventStore {
 
     private val events = ArrayList<EventModel>()
@@ -44,7 +43,6 @@ class EventMemStore: EventStore {
             eventFound.endDate = event.endDate
             eventFound.startTime = event.startTime
             eventFound.endTime =  event.endTime
-            logAll()
         }
     }
 

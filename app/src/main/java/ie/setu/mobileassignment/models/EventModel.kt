@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 
 @Parcelize
-data class EventModel(var id: Long = 0,
+data class EventModel(var id: Long,
                       var title: String,
                       var description: String,
                       var location: String,

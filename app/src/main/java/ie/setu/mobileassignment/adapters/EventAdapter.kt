@@ -40,8 +40,9 @@ class EventAdapter (private var events: List<EventModel>, private val listener: 
         fun bind(event: EventModel, listener: EventListener) {
             binding.viewEventTitle.text = event.title
             binding.viewEventDescription.text = event.description
+            binding.viewEventLocation.text = event.location
             "${event.startTime} - ${event.endTime}".also { binding.viewEventTime.text = it }
-            binding.root.setOnClickListener{ listener.onEventClick(event)}
+            binding.root.setOnClickListener{ listener.onEventClick(event) }
         }
     }
 }

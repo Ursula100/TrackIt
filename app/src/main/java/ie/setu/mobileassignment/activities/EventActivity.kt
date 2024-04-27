@@ -38,7 +38,8 @@ class EventActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         app = application as MainApp
-        var edit = false //flag to check if we arrived from EventView Activity.
+        var edit = false //
+        var eventId = 0L
 
         i("Trackit Activity started..") /***TODO: extract all log messages to string.xml*/
 
@@ -70,10 +71,13 @@ class EventActivity : AppCompatActivity() {
             event = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 intent.extras?.getParcelable("event_edit", EventModel::class.java)!!//Find link to code snippet
             } else intent.extras?.getParcelable("event_edit")!!
+            eventId = event.id
             binding.eventTitle.setText(event.title)
             binding.eventDescription.setText(event.description)
             binding.eventLocation.setText(event.location)
             binding.startDateBtn.text = event.startDate.format(dFormatter).substring(0,11)
+            selectedStartDate = event.startDate.format(dFormatter)
+            selectedEndDate =  event.endDate.format(dFormatter)
             binding.endDateBtn.text = event.endDate.format(dFormatter).substring(0,11)
             binding.startTimeBtn.text = event.startTime
             binding.endTimeBtn.text = event.endTime
@@ -87,7 +91,6 @@ class EventActivity : AppCompatActivity() {
            Else, an event is created and the created event is added to the arraylist with appropriate values for each field.
          */
         binding.addBtn.setOnClickListener {
-            val id = 0L
             val title = binding.eventTitle.text.toString()
             val description = binding.eventDescription.text.toString()
             val location = binding.eventLocation.text.toString()
@@ -97,7 +100,7 @@ class EventActivity : AppCompatActivity() {
             val endTime = binding.endTimeBtn.text.toString()
 
             if (title.isNotEmpty() && datesValid(startDate, endDate) && timeCompare(startTime,endTime) == 1) {
-                val event = EventModel(id, title, description, location, startDate, endDate, startTime, endTime)
+                val event = EventModel(eventId, title, description, location, startDate, endDate, startTime, endTime)
                 if(edit) {
                     app.events.update(event.copy())
                     i("Save Event Button Pressed: $event")
@@ -165,7 +168,6 @@ class EventActivity : AppCompatActivity() {
           Retrieves and stores date selected from time picker as a String of form: 8:05 AM/PM
         */
         binding.startTimeBtn.setOnClickListener{
-
 
             val isSystem24Hour = is24HourFormat(this)
             val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H

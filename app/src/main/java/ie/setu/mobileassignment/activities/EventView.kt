@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import ie.setu.mobileassignment.R
 import ie.setu.mobileassignment.adapters.EventAdapter
 import ie.setu.mobileassignment.adapters.EventListener
 import ie.setu.mobileassignment.databinding.ActivityEventViewBinding
@@ -76,7 +77,8 @@ class EventView : AppCompatActivity(), EventListener {
                 )
             }
             if (it.resultCode == Activity.RESULT_CANCELED) {
-                Snackbar.make(binding.root, "Adding Event Cancelled", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root,
+                    getString(R.string.adding_event_cancelled), Snackbar.LENGTH_LONG).show()
             }
         }
 
