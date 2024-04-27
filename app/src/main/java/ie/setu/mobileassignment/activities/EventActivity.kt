@@ -1,5 +1,6 @@
 package ie.setu.mobileassignment.activities
 
+import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ import java.util.Locale
 class EventActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEventBinding
+    private var event = EventModel(0,"", "", "", LocalDate.now(), LocalDate.now(), "", "")
     lateinit var app: MainApp
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +38,10 @@ class EventActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         app = application as MainApp
-        i("Trackit Activity started..")
+        var edit = false //
+        var eventId = 0L
+
+        i("Trackit Activity started..") /***TODO: extract all log messages to string.xml*/
 
         //A formatter which Converts a Date object to desired String representation.
         val sFormatter = SimpleDateFormat("EEE, MMM dd yyyy", Locale.getDefault())
@@ -45,7 +50,7 @@ class EventActivity : AppCompatActivity() {
 
         //Get today's date as LocalDAte object
         val curLocalDate = LocalDate.now()
-        //Convert today's date to String of format of format Sat. SEP 12 2024
+        //Convert today's date to String of format of format: Sat, SEP 12 2024
         val curDate = curLocalDate.format(dFormatter)
 
         /*Assign curDate string to both start and end date as default.
@@ -61,6 +66,25 @@ class EventActivity : AppCompatActivity() {
         binding.startTimeBtn.text = getString(R.string.default_start_time)
         binding.endTimeBtn.text = getString(R.string.default_end_time)
 
+        if (intent.hasExtra("event_edit")){
+            edit = true
+            event = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.extras?.getParcelable("event_edit", EventModel::class.java)!!//Find link to code snippet
+            } else intent.extras?.getParcelable("event_edit")!!
+            eventId = event.id
+            binding.eventTitle.setText(event.title)
+            binding.eventDescription.setText(event.description)
+            binding.eventLocation.setText(event.location)
+            binding.startDateBtn.text = event.startDate.format(dFormatter).substring(0,11)
+            selectedStartDate = event.startDate.format(dFormatter)
+            selectedEndDate =  event.endDate.format(dFormatter)
+            binding.endDateBtn.text = event.endDate.format(dFormatter).substring(0,11)
+            binding.startTimeBtn.text = event.startTime
+            binding.endTimeBtn.text = event.endTime
+
+            binding.addBtn.setText(R.string.button_save_event)
+        }
+
 
         /* Listener detects when addBtn is clicked.
            When addBtn is clicked, f the title field is left empty, it shows a quick message is shown to the user telling them to enter a title.
@@ -75,27 +99,32 @@ class EventActivity : AppCompatActivity() {
             val startTime = binding.startTimeBtn.text.toString()
             val endTime = binding.endTimeBtn.text.toString()
 
-
             if (title.isNotEmpty() && datesValid(startDate, endDate) && timeCompare(startTime,endTime) == 1) {
-                val event = EventModel(title, description, location, startDate, endDate, startTime, endTime)
-                app.events.create(event.copy())
-                i("add Button Pressed: $event")
+                val event = EventModel(eventId, title, description, location, startDate, endDate, startTime, endTime)
+                if(edit) {
+                    app.events.update(event.copy())
+                    i("Save Event Button Pressed: $event")
+                }
+                else {
+                    app.events.create(event.copy())
+                    i("add Button Pressed: $event")
+                }
                 setResult(RESULT_OK)
                 finish()
             }
             else if (title.isEmpty()){
                 Snackbar
-                    .make(it,"Please enter a title", Snackbar.LENGTH_LONG)
+                    .make(it, getString(R.string.enter_a_title), Snackbar.LENGTH_LONG)
                     .show()
             }
             else if (!datesValid(startDate, endDate)){
                 Snackbar
-                    .make(it,"End date should be no earlier than the start date", Snackbar.LENGTH_LONG)
+                    .make(it, getString(R.string.date_selection_error), Snackbar.LENGTH_LONG)
                     .show()
             }
             else {
                 Snackbar
-                    .make(it,"End time should be no earlier than the start time ", Snackbar.LENGTH_LONG)
+                    .make(it, getString(R.string.time_selection_error), Snackbar.LENGTH_LONG)
                     .show()
             }
         }
@@ -140,7 +169,6 @@ class EventActivity : AppCompatActivity() {
         */
         binding.startTimeBtn.setOnClickListener{
 
-
             val isSystem24Hour = is24HourFormat(this)
             val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
@@ -160,12 +188,10 @@ class EventActivity : AppCompatActivity() {
 
         }
 
-
         /*Time picker pops up when button is clicked.
           Retrieves and stores date selected from time picker as a String of form: 8:05 AM/PM
         */
         binding.endTimeBtn.setOnClickListener{
-
 
             val isSystem24Hour = is24HourFormat(this)
             val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
@@ -186,6 +212,5 @@ class EventActivity : AppCompatActivity() {
             }
 
         }
-
     }
 }

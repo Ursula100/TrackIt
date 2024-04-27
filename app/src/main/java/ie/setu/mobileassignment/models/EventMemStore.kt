@@ -3,11 +3,13 @@ package ie.setu.mobileassignment.models
 import timber.log.Timber.i
 import java.time.LocalDate
 
-/**Class implementing a simple in-memory implementation using ArrayList
- */
+/**Class implementing a simple in-memory implementation using ArrayList*/
+
+var lastId = 0L
+internal fun getId() = ++lastId
 class EventMemStore: EventStore {
 
-    val events = ArrayList<EventModel>()
+    private val events = ArrayList<EventModel>()
 
     //Method returns List of all events
     override fun findAll(): List<EventModel>{
@@ -16,8 +18,10 @@ class EventMemStore: EventStore {
 
     //Method adds an event object to events store (arraylist of events)
     override fun create(event: EventModel){
+        event.id = getId()
         events.add(event)
         logAll()
+        lastId = event.id
     }
 
     //Method return list of events on that specified date.
@@ -29,7 +33,20 @@ class EventMemStore: EventStore {
         return eventsMatch
     }
 
-    //Methods logs all events
+    override fun update(event: EventModel){
+        val eventFound: EventModel? = events.find { e -> e.id == event.id}
+        if (eventFound != null){
+            eventFound.title = event.title
+            eventFound.description = event.description
+            eventFound.location = event.location
+            eventFound.startDate = event.startDate
+            eventFound.endDate = event.endDate
+            eventFound.startTime = event.startTime
+            eventFound.endTime =  event.endTime
+        }
+    }
+
+    //Method logs all events
     private fun logAll(){
         events.forEach { i("$it") }
     }

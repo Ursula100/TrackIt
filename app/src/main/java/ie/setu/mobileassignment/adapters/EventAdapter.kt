@@ -10,7 +10,11 @@ import ie.setu.mobileassignment.models.EventModel
  * It also determines which view holder will be used to display the data, in this case found view_event.xml
  */
 
-class EventAdapter (private var events: List<EventModel>) :
+interface EventListener {
+    fun onEventClick(event: EventModel)
+}
+
+class EventAdapter (private var events: List<EventModel>, private val listener: EventListener) :
     RecyclerView.Adapter<EventAdapter.MainHolder>() {
 
     //Initialises the viewHolder when the adapter is created
@@ -24,7 +28,7 @@ class EventAdapter (private var events: List<EventModel>) :
     //Binds the viewHolder to the adapter.
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val event = events[holder.adapterPosition]
-        holder.bind(event)
+        holder.bind(event, listener)
     }
 
     //Method returns the size of the event collection. Will use subsequently
@@ -33,10 +37,12 @@ class EventAdapter (private var events: List<EventModel>) :
     class MainHolder(private val binding : ViewEventBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(event: EventModel) {
+        fun bind(event: EventModel, listener: EventListener) {
             binding.viewEventTitle.text = event.title
             binding.viewEventDescription.text = event.description
+            binding.viewEventLocation.text = event.location
             "${event.startTime} - ${event.endTime}".also { binding.viewEventTime.text = it }
+            binding.root.setOnClickListener{ listener.onEventClick(event) }
         }
     }
 }

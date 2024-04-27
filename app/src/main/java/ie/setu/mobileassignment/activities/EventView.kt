@@ -7,13 +7,16 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import ie.setu.mobileassignment.R
 import ie.setu.mobileassignment.adapters.EventAdapter
+import ie.setu.mobileassignment.adapters.EventListener
 import ie.setu.mobileassignment.databinding.ActivityEventViewBinding
 import ie.setu.mobileassignment.main.MainApp
+import ie.setu.mobileassignment.models.EventModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class EventView : AppCompatActivity() {
+class EventView : AppCompatActivity(), EventListener {
 
     private lateinit var binding: ActivityEventViewBinding
     lateinit var app: MainApp
@@ -40,7 +43,7 @@ class EventView : AppCompatActivity() {
         binding.dateTextView.text = curDate
 
         //RecyclerView displays events on selected date
-        binding.recyclerView.adapter = EventAdapter(app.events.findByDate(curLocalDate))
+        binding.recyclerView.adapter = EventAdapter(app.events.findByDate(curLocalDate), this)
 
         //Listens to change of selected date, updates shown selected date text and updates RecyclerView with events of the current selected date
         binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
@@ -48,7 +51,7 @@ class EventView : AppCompatActivity() {
             val localDate = LocalDate.parse(dateString, dFormatter1)
             val selectedDate = dFormatter.format(localDate).substring(0,11)
             binding.dateTextView.text = selectedDate
-            binding.recyclerView.adapter = EventAdapter(app.events.findByDate(localDate))
+            binding.recyclerView.adapter = EventAdapter(app.events.findByDate(localDate), this)
         }
 
         //Add button launches EventActivity when clicked and  keeps note of result
@@ -59,7 +62,7 @@ class EventView : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = EventAdapter(app.events.findAll())
+        binding.recyclerView.adapter = EventAdapter(app.events.findAll(), this)
     }
 
     //If result from EventActivity is RESULT_CANCELED notify user that the event was not created
@@ -74,9 +77,16 @@ class EventView : AppCompatActivity() {
                 )
             }
             if (it.resultCode == Activity.RESULT_CANCELED) {
-                Snackbar.make(binding.root, "Adding Event Cancelled", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root,
+                    getString(R.string.adding_event_cancelled), Snackbar.LENGTH_LONG).show()
             }
         }
+
+    override fun onEventClick(event: EventModel) {
+        val launcherIntent = Intent(this, EventActivity::class.java)
+        launcherIntent.putExtra("event_edit", event)
+        getResult.launch(launcherIntent)
+    }
 
 }
 

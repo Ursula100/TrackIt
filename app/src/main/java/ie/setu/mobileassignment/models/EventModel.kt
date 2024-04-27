@@ -1,5 +1,15 @@
 package ie.setu.mobileassignment.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 
-data class EventModel(var title: String, var description: String, var location: String, var startDate: LocalDate, var endDate: LocalDate, var startTime: String, var endTime: String)
+@Parcelize
+data class EventModel(var id: Long,
+                      var title: String,
+                      var description: String,
+                      var location: String,
+                      var startDate: LocalDate,
+                      var endDate: LocalDate,
+                      var startTime: String,
+                      var endTime: String) : Parcelable
