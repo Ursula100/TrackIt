@@ -21,6 +21,7 @@
             android:minHeight="?attr/actionBarSize"
             app:title="@string/my_app_name"
             app:titleTextColor="?attr/colorOnPrimary" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <CalendarView

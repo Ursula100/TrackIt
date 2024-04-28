@@ -10,16 +10,17 @@ object EventValidation {
     fun timeCompare(str1: String, str2: String): Int{
         val amPm1 = str1.substring(str1.indexOf(' ') + 1)
         val amPm2 = str2.substring(str2.indexOf(' ') + 1)
-        return if(amPm1 !== amPm2)
+        return if(amPm1.compareTo(amPm2) != 0)
             if (amPm1 == "AM")  1 else 0
         else {
-            val sHour1 = str1.substring(0, str1.indexOf(':'))
-            val sHour2 = str2.substring(0, str2.indexOf(':'))
+            val sHour1 = Integer.parseInt(str1.substring(0, str1.indexOf(':')))
+            val sHour2 = Integer.parseInt(str2.substring(0, str2.indexOf(':')))
             if (sHour1 == sHour2) {
-                val sMinute1 = str1.substring(str1.indexOf(':') + 1, str1.indexOf(':') + 2)
-                val sMinute2 = str2.substring(str2.indexOf(':') + 1, str2.indexOf(':') + 2)
+                val sMinute1 = Integer.parseInt(str1.substring(str1.indexOf(':') + 1, str1.indexOf(':') + 3))
+                val sMinute2 = Integer.parseInt(str2.substring(str2.indexOf(':') + 1, str2.indexOf(':') + 3))
                 if (sMinute1 <= sMinute2) 1 else 0
-            } else if (sHour1 < sHour2) 1
+            }
+            else if (sHour1 < sHour2) 1
             else 0
         }
     }

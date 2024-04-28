@@ -1,19 +1,21 @@
 package ie.setu.mobileassignment.main
 
 import android.app.Application
-import ie.setu.mobileassignment.models.EventMemStore
-import ie.setu.mobileassignment.models.EventModel
+import ie.setu.mobileassignment.models.EventSQLStore
+import ie.setu.mobileassignment.models.EventStore
 import timber.log.Timber
 import timber.log.Timber.i
-import java.time.LocalDate
 
 class MainApp : Application() {
 
-    val events = EventMemStore()
+    lateinit var events: EventStore
 
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
+        //events = EventMemStore()
+        //events = EventJSONStore(applicationContext)
+        events = EventSQLStore(applicationContext)
         i("App started")
     }
 
