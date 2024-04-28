@@ -1,7 +1,6 @@
 package ie.setu.mobileassignment.main
 
 import android.app.Application
-import ie.setu.mobileassignment.models.EventJSONStore
 import ie.setu.mobileassignment.models.EventSQLStore
 import ie.setu.mobileassignment.models.EventStore
 import timber.log.Timber
