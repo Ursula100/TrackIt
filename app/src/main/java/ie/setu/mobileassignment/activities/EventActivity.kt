@@ -101,13 +101,13 @@ class EventActivity : AppCompatActivity() {
 
             if (title.isNotEmpty() && datesValid(startDate, endDate) && timeCompare(startTime,endTime) == 1) {
                 val event = EventModel(eventId, title, description, location, startDate, endDate, startTime, endTime)
-                if(edit) {
+                 if(edit) {
                     app.events.update(event.copy())
-                    i("Save Event Button Pressed: $event")
+                     i("Save Event Button Pressed")
                 }
                 else {
                     app.events.create(event.copy())
-                    i("add Button Pressed: $event")
+                    i("add Button Pressed")
                 }
                 setResult(RESULT_OK)
                 finish()
