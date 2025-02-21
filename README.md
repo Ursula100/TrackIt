@@ -3,6 +3,8 @@
 
 Trackit is a calendar app on mobile which helps the user keep track of appointments, events and tasks in a fun and reliable manner. The app is built using Kotlin on android studio and designed to run on android mobile with minimum SDK, API 30.
 
+[Demo Video](https://youtu.be/Veb949ccc0k)
+
 ## Wireframes
 
 <img src= "https://github.com/mobile-app-dev-1/mobileapp-Ursula100/assets/122871659/384ead06-c05a-44dc-9221-59debe27d220" width ="350" length = "1200" >
