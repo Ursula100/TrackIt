@@ -1,14 +1,21 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/ZX5kW5CC)
-# TRACTIT APP
+# TRACTIT APP - Never Miss a Moment !
 
 Trackit is a calendar app on mobile which helps the user keep track of appointments, events and tasks in a fun and reliable manner. The app is built using Kotlin on android studio and designed to run on android mobile with minimum SDK, API 30.
 
 [Demo Video](https://youtu.be/Veb949ccc0k)
 
-## Wireframes
+## MockUps
+<div style="display: flex; justify-content: center; gap: 10px;">
+  <img src="https://github.com/user-attachments/assets/fb56bef5-5c8d-44e8-9727-ddf8b5a09cef" alt="start" width="200">
+  <img src="https://github.com/user-attachments/assets/194e381d-3a2b-4b9a-8c55-eea0a84a1e74" alt="add_event" width="200">
+  <img src="https://github.com/user-attachments/assets/c8a65582-833f-4139-8ed8-044d46eade52" alt="event_added" width="200">
+  <img src="https://github.com/user-attachments/assets/7e5aae5f-98c4-40d9-821d-3556453e65ce" alt="update_event" width="200">
+</div>
 
-<img src= "https://github.com/mobile-app-dev-1/mobileapp-Ursula100/assets/122871659/384ead06-c05a-44dc-9221-59debe27d220" width ="350" length = "1200" >
-<img src= "https://github.com/mobile-app-dev-1/mobileapp-Ursula100/assets/122871659/ce07f5d2-e314-4227-9ba6-b23b79f73b6c" width ="350" length = "1200" >
+
+
+
 
 ## Functionality
 
