@@ -28,8 +28,6 @@ Ability to create and add to calendar events with fields:
 - startTime: String,
 - endTime: String
 
-(Field Validation to be added soon)
-
 ### Read/Display events
 Ability to display calendar events on selected date.
 Still buildinig on ...
