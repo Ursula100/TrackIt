@@ -1,4 +1,3 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/ZX5kW5CC)
 # TRACTIT APP - Never Miss a Moment !
 
 Trackit is a calendar app on mobile which helps the user keep track of appointments, events and tasks in a fun and reliable manner. The app is built using Kotlin on android studio and designed to run on android mobile with minimum SDK, API 30.
